@@ -17,25 +17,21 @@ class _JujeobPAgeState extends State<JujeobPage> {
   String voiceText = '';
   void speak({required String name}) async {
     final dio = Dio(BaseOptions(
-      baseUrl: 'http://127.0.0.1:5000',
+      baseUrl:
+          'https://oc2hyphde0.execute-api.ap-northeast-2.amazonaws.com/dev',
     ));
     final response = await dio.get('/api/v1/tts', queryParameters: {
       'name': name,
     });
 
     if (response.statusCode != 200) {
-      await flutterTts.speak('모..모지 무슨 일이 일어난거지...에러다!!!');
+      await flutterTts.speak(name);
       return;
     }
-
-    final voiceBinary = response.data['data']['voice'];
     setState(() {
       voiceText = response.data['data']['text'];
     });
-    final voiceUrl = 'data:audio/wav;base64,$voiceBinary';
-
-    final player = AudioPlayer();
-    await player.play(UrlSource(voiceUrl));
+    await flutterTts.speak(voiceText);
   }
 
   @override
@@ -88,7 +84,8 @@ class _JujeobPAgeState extends State<JujeobPage> {
                       onPressed: () => speak(name: name),
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20), // Increase the border radius
+                          borderRadius: BorderRadius.circular(
+                              20), // Increase the border radius
                         ),
                       ),
                       child: const Text('주접듣기'),

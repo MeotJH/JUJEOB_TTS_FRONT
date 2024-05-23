@@ -16,7 +16,8 @@ class _TTSTestPageState extends State<TTSServerPage> {
   String voiceText = '';
   void speak({required String name}) async {
     final dio = Dio(BaseOptions(
-      baseUrl: 'http://127.0.0.1:5000',
+      baseUrl:
+          'https://oc2hyphde0.execute-api.ap-northeast-2.amazonaws.com/dev',
     ));
     final response = await dio.get('/api/v1/tts', queryParameters: {
       'name': name,
@@ -26,15 +27,10 @@ class _TTSTestPageState extends State<TTSServerPage> {
       await flutterTts.speak(name);
       return;
     }
-
-    final voiceBinary = response.data['data']['voice'];
     setState(() {
       voiceText = response.data['data']['text'];
     });
-    final voiceUrl = 'data:audio/wav;base64,$voiceBinary';
-
-    final player = AudioPlayer();
-    await player.play(UrlSource(voiceUrl));
+    await flutterTts.speak(voiceText);
   }
 
   @override

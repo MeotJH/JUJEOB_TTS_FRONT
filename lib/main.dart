@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:jujeob_tts/tts_test_page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:jujeob_tts/jujeob_page.dart';
+import 'package:jujeob_tts/tts_server_page.dart';
+import 'package:url_strategy/url_strategy.dart';
+
+final GoRouter _router = GoRouter(
+  routes: <RouteBase>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const TTSServerPage();
+      },
+    ),
+    GoRoute(
+      path: '/jujeob',
+      builder: (BuildContext context, GoRouterState state) {
+        return const JujeobPage();
+      },
+    ),
+  ],
+);
 
 void main() {
+  setPathUrlStrategy();
   runApp(const MyApp());
 }
 
@@ -17,7 +38,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         useMaterial3: true,
       ),
-      home: const TTSTestPage(),
+      home: const TTSServerPage(),
     );
   }
 }
